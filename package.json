@@ -1,0 +1,40 @@
+{
+  "name": "@minormending/map-kit",
+  "version": "0.1.0",
+  "description": "Shared pieces behind restroom-map and orchard-map: a static map on GitHub Pages with Postgres behind it and no server in between.",
+  "type": "module",
+  "license": "MIT",
+  "repository": "github:minormending/map-kit",
+  "files": ["dist", "node", "sql", "src"],
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "default": "./dist/index.js" },
+    "./node/connect": "./node/connect.mjs",
+    "./node/migrate": "./node/migrate.mjs",
+    "./node/moderation": "./node/moderation.mjs",
+    "./node/testkit": "./node/testkit.mjs",
+    "./node/cli": "./node/cli.mjs",
+    "./node/fetch": "./node/fetch.mjs",
+    "./sql/*": "./sql/*"
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "prepare": "tsc -b",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.116.0",
+    "pg": "^8.23.0"
+  },
+  "peerDependencies": {
+    "react": ">=18"
+  },
+  "peerDependenciesMeta": {
+    "react": { "optional": true }
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "@types/pg": "^8.23.1",
+    "@types/react": "^19.2.18",
+    "typescript": "~6.0.2"
+  }
+}
