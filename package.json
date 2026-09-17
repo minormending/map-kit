@@ -5,16 +5,25 @@
   "type": "module",
   "license": "MIT",
   "repository": "github:minormending/map-kit",
-  "files": ["dist", "node", "sql", "src"],
+  "files": [
+    "dist",
+    "node",
+    "sql",
+    "src"
+  ],
   "exports": {
-    ".": { "types": "./dist/index.d.ts", "default": "./dist/index.js" },
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
     "./node/connect": "./node/connect.mjs",
     "./node/migrate": "./node/migrate.mjs",
     "./node/moderation": "./node/moderation.mjs",
     "./node/testkit": "./node/testkit.mjs",
     "./node/cli": "./node/cli.mjs",
     "./node/fetch": "./node/fetch.mjs",
-    "./sql/*": "./sql/*"
+    "./sql/*": "./sql/*",
+    "./node/sql": "./node/sql.mjs"
   },
   "scripts": {
     "build": "tsc -b",
@@ -29,7 +38,9 @@
     "react": ">=18"
   },
   "peerDependenciesMeta": {
-    "react": { "optional": true }
+    "react": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@types/node": "^24.13.3",
