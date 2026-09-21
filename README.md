@@ -57,6 +57,17 @@ its definer unless declared `security_invoker` — so a readable view over a
 locked table hands back every row it was built from. That is how a moderation
 queue ends up serving contact addresses to anyone holding the publishable key.
 
+## Several apps, one database
+
+The free plan allows two active projects per account, so a project per app is
+not affordable and a schema per app is. `docs/SHARED-DATABASE.md` is the
+runbook: how the arrangement works, how to add an app, how to move an existing
+one in, and the traps that cost an hour each.
+
+Read it before adding the next app. Step three — exposing the schema to
+PostgREST — is the one everybody forgets, and its failure looks like a broken
+database rather than a missing setting.
+
 ## Using it
 
 ```bash
