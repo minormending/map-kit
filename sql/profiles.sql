@@ -19,6 +19,13 @@ create table if not exists profiles (
 
 alter table profiles enable row level security;
 
+-- Supabase's default privileges have already granted the API roles everything
+-- on this table by the time this file runs, so "no write grant" has to be
+-- taken back rather than merely not given. Revoke first, then grant what is
+-- meant — otherwise the header below is a description of an intention rather
+-- than of the database.
+revoke all on profiles from anon, authenticated;
+
 -- Display names are public: they appear next to submissions. Email is not.
 create policy profiles_read on profiles for select to anon, authenticated using (true);
 grant select on profiles to anon, authenticated;
