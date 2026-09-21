@@ -15,6 +15,10 @@ create table if not exists rate_limit (
 
 alter table rate_limit enable row level security;
 -- No policies and no grants, deliberately: only the functions below touch it.
+-- The grants Supabase's default privileges already handed out are taken back
+-- here, because not granting something it has already granted achieves
+-- nothing.
+revoke all on rate_limit from anon, authenticated;
 
 -- A salt makes the stored digests useless on their own. IPv4 is a small enough
 -- space that an unsalted hash is reversible by brute force.

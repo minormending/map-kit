@@ -55,6 +55,12 @@ alter table feedback enable row level security;
 -- returning zero rows, because there is no policy to get wrong.
 --
 -- The submit_* functions below are the only door.
+--
+-- This has to be a revoke, not an omission. Supabase's default privileges
+-- granted the API roles everything on both tables the moment they were
+-- created, so withholding a grant withholds nothing.
+revoke all on flags    from anon, authenticated;
+revoke all on feedback from anon, authenticated;
 
 create or replace function submit_flag(
   p_target_type   text,
@@ -133,4 +139,11 @@ create or replace view moderation_queue as
     from feedback;
 
 -- Reachable only as the owner, which is how scripts/db.mjs connects.
+--
+-- Both halves matter. A view runs as its DEFINER unless told otherwise, so one
+-- left readable would serve every flag and every feedback row — contact
+-- addresses included — straight past the row-level security on the tables
+-- underneath it. The revoke is the fence; security_invoker means that even
+-- inside the fence it answers as whoever asked.
 revoke all on moderation_queue from public, anon, authenticated;
+alter view moderation_queue set (security_invoker = on);

@@ -17,7 +17,7 @@ decisions, and those decisions are what lives here.
 | --- | --- |
 | `src/` | browser TypeScript — Supabase client, Google OAuth, Photon geocoding, freshness |
 | `node/` | scripts — migration runner, moderation queue, a polite crawler, a test harness |
-| `sql/` | migration templates — rate limiting, flags + feedback, accounts |
+| `sql/` | migration templates — lockdown, rate limiting, flags + feedback, accounts |
 
 ### `node/fetch.mjs` — the polite crawler
 
@@ -42,6 +42,20 @@ That indirection is deliberate: a migration's checksum has to be stable, and a
 file whose content depends on an environment variable is a file whose hash
 changes underneath you. The runner refuses a migration that changed after it
 was applied, and it is right to.
+
+**Apply `lockdown.sql` first.** Supabase grants anon and authenticated every
+privilege on each new table in `public` by default, so a table is open the
+moment it exists and stays open unless something takes that back. Each of the
+other files now revokes its own tables, so the kit is safe with or without
+this one — but that only covers the kit's tables, and yours are being granted
+away as you create them.
+
+This is easy to miss because row-level security usually covers for it: the
+grant is there, the policy denies, the API returns an empty list, and
+everything looks correct. It stops covering for you at a view, which runs as
+its definer unless declared `security_invoker` — so a readable view over a
+locked table hands back every row it was built from. That is how a moderation
+queue ends up serving contact addresses to anyone holding the publishable key.
 
 ## Using it
 
